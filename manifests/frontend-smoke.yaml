@@ -1,0 +1,39 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: frontend-smoke
+spec:
+  selector:
+    app: frontend
+    deploy-stage: smoke
+  ports:
+  - port: 80
+    targetPort: service-port
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-smoke
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: frontend
+      deploy-stage: smoke
+  template:
+    metadata:
+      labels:
+        app: frontend
+        deploy-stage: smoke
+    spec:
+      containers:
+      - name: frontend
+        image: frontend:v2
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: BACKEND
+            value: backend-v2
+        ports:
+        - name: service-port
+          containerPort: 80

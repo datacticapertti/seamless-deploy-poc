@@ -1,0 +1,44 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: frontend-active
+spec:
+  selector:
+    app: frontend
+    deploy-stage: active
+  ports:
+  - port: 80
+    targetPort: service-port
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-active
+spec:
+  replicas: 5
+  minReadySeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: frontend
+      deploy-stage: active
+  template:
+    metadata:
+      labels:
+        app: frontend
+        deploy-stage: active
+    spec:
+      containers:
+      - name: frontend
+        image: frontend:v2
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: BACKEND
+            value: backend-v2
+        ports:
+        - name: service-port
+          containerPort: 80

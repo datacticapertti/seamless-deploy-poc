@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: backend-v2
+spec:
+  selector:
+    app: backend
+    version: v2
+  ports:
+  - port: 80
+    targetPort: service-port
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-v2
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: backend
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: backend
+        version: v2
+    spec:
+      containers:
+      - name: backend
+        image: backend:v2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: service-port
+          containerPort: 80

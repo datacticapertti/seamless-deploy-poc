@@ -1,0 +1,6 @@
+#!/bin/sh
+while true
+do
+	curl $(minikube service frontend-active --url)
+	sleep 5
+done
