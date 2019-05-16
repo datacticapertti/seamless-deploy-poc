@@ -1,4 +1,4 @@
-.PHONY: clean deepclean deploy setup
+.PHONY: setup deploy-initial-active deploy-smoke upgrade-active clean deepclean query-active query-smoke images
 
 setup:
 	command -v kubectl || (echo "Install kubectl first, see https://kubernetes.io/docs/tasks/tools/install-kubectl/" && exit 1)
@@ -32,3 +32,5 @@ query-active:
 query-smoke:
 	curl $$(minikube service frontend-smoke --url)
 
+images:
+	cd images; make all

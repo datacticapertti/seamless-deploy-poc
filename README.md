@@ -50,6 +50,18 @@ Once you have minikube, set up the kubernetes cluster with
 
     $ make setup
 
+## Build docker images
+
+Minikube uses a docker daemon running inside a virtual machine. You
+need to set a few environment variables to get images built in the
+minikube docker daemon:
+
+    $ eval $(minikube docker-env)
+
+To build the images used in the example, use
+
+    $ make images
+
 ## Deploy the initial active version of the application
 
 The initial version is deployed with
